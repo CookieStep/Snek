@@ -62,11 +62,11 @@ class Snake extends Array{
 			if(y >= h) y -= h;
 		}
 
-		if(this.includes(head)) {
-			this.dead = true;
-		}
 		if(!this.dead) {
 			head = map.index(x, y);
+			if(this.includes(head)) {
+				this.dead = true;
+			}
 			this.unshift(head);
 		}
 
