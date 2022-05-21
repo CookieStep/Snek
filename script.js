@@ -68,6 +68,8 @@ class Snake extends Array{
 				this.dead = true;
 			}
 			this.unshift(head);
+		}else{
+			this.unshift([x, y]);
 		}
 
 		this.lastDir = dir;
@@ -132,14 +134,37 @@ function loop() {
 	map.draw();
 	ctx.fillStyle = snake.dead? "#f70": "#0f0";
 
-	for(let i of snake) {
-		let [x, y] = map.coords(i);
-		ctx.fillRect(x, y, 1, 1);
+	{
+		let last;
+		let p = .2;
+		let w = 1 - p*2;
+		for(let i of snake) {
+			let x, y;
+			if(typeof i == "number") {
+				[x, y] = map.coords(i);
+			}else{
+				[x, y] = i;
+			}
+			ctx.fillRect(x+p, y+p, w, w);
+
+			let lx, ly;
+			if(typeof last == "number") {
+				[lx, ly] = map.coords(last);
+			}else if(last) {
+				[lx, ly] = last;
+			}
+			ctx.fillRect((lx+x)/2+p, (ly+y)/2+p, w, w);
+
+			last = i;
+		}
 	}
 	{
+		let p = .1;
+		let w = 1 - p*2;
+
 		let [x, y] = map.coords(apple);
 		ctx.fillStyle = "#f00";
-		ctx.fillRect(x, y, 1, 1);
+		ctx.fillRect(x+p, y+p, w, w);
 	}
 
 	ctx.resetTransform();
